@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.CollectMapper">
+    <insert id="create" parameterType="Collect">
+        INSERT INTO collect (user_id, note_id) VALUES (#{userId}, #{noteId})
+    </insert>
+
+    <select id="findByUserIdAndNoteId" resultType="Collect">
+        SELECT
+            id,
+            user_id,
+            note_id,
+            create_time,
+            update_time
+        FROM collect
+        WHERE user_id = #{userId} AND note_id = #{noteId}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM collect
+        WHERE id = #{id}
+    </delete>
+
+    <select id="getCollectListByUser" resultType="Note">
+        SELECT
+            n.id,
+            n.title,
+            n.content,
+            n.type,
+            n.read_count,
+            n.create_time,
+            n.update_time,
+            n.user_id,
+            c2.name AS category_name
+        FROM note AS n
+            INNER JOIN collect AS c on n.id = c.note_id
+            INNER JOIN category AS c2 on n.category_id = c2.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.id DESC
+    </select>
+</mapper>

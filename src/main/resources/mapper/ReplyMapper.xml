@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.ReplyMapper">
+    <insert id="create" parameterType="Reply">
+        INSERT INTO reply (content, problem_id, user_id) VALUES (#{content}, #{problemId}, #{userId})
+    </insert>
+
+    <select id="getReplyList" resultType="Reply">
+        SELECT
+            r.id,
+            r.content,
+            r.status,
+            r.create_time,
+            u.username AS author
+        FROM reply AS r INNER JOIN user AS u on r.user_id = u.id
+        WHERE r.problem_id = #{problemId}
+        ORDER BY r.create_time desc
+    </select>
+
+    <update id="updateStatus" parameterType="Reply">
+        UPDATE reply
+        SET status = '1'
+        WHERE id = #{id}
+    </update>
+
+    <select id="getReplyWithReceived" resultType="Reply">
+        SELECT id
+        FROM reply
+        WHERE problem_id = #{problemId} AND status = '1'
+    </select>
+</mapper>

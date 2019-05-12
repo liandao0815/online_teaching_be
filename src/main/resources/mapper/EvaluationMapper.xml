@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.EvaluationMapper">
+    <insert id="create" parameterType="Evaluation">
+        INSERT INTO evaluation (content, score, user_id, course_id)
+        VALUES (#{content}, #{score}, #{userId}, #{courseId})
+    </insert>
+
+    <select id="getAvgScore" resultType="java.lang.Object">
+        SELECT AVG(score)
+        FROM evaluation
+        WHERE course_id = #{courseId}
+    </select>
+
+    <select id="getEvaluationList" resultType="Evaluation">
+        SELECT
+            e.id,
+            e.content,
+            e.score,
+            e.create_time,
+            u.username AS author
+        FROM evaluation AS e
+            INNER JOIN user AS u on e.user_id = u.id
+            INNER JOIN course AS c on e.course_id = c.id
+        WHERE e.course_id = #{courseId}
+    </select>
+
+    <select id="findByUserIdAnCourseId" resultType="Evaluation">
+        SELECT id
+        FROM evaluation
+        WHERE user_id = #{userId} AND course_id = #{courseId}
+    </select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.MessageMapper">
+    <insert id="create" parameterType="Message">
+        INSERT INTO message (content, user_id) VALUES (#{content}, #{userId})
+    </insert>
+
+    <select id="getMessageList" resultType="Message">
+        SELECT
+            id,
+            content,
+            status,
+            create_time,
+            update_time
+        FROM message
+        WHERE user_id = #{userId}
+        ORDER BY id DESC
+    </select>
+
+    <update id="update">
+        UPDATE message
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByIdAndUserId" resultType="Message">
+        SELECT
+            id,
+            status,
+            content,
+            create_time,
+            update_time
+        FROM message
+        WHERE id = #{id} AND user_id = #{userId}
+    </select>
+</mapper>

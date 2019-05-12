@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.LiveRoomMapper">
+    <select id="findByUserId" resultType="LiveRoom">
+        SELECT
+            id,
+            title,
+            poster,
+            banner,
+            status,
+            living,
+            user_id,
+            live_time,
+            create_time,
+            update_time
+        FROM live_room
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findById" resultType="LiveRoom">
+        SELECT
+            l.id,
+            title,
+            poster,
+            banner,
+            status,
+            living,
+            user_id,
+            live_time,
+            l.create_time,
+            l.update_time,
+            u.username AS author
+        FROM live_room AS l
+            INNER JOIN user AS u on l.user_id = u.id
+        WHERE l.id = #{id}
+    </select>
+
+    <insert id="create" parameterType="LiveRoom">
+        INSERT INTO live_room (title, banner, poster, user_id)
+        VALUES (#{title}, #{banner}, #{poster}, #{userId})
+    </insert>
+
+    <update id="update" parameterType="LiveRoom">
+        UPDATE live_room
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="banner != null">banner = #{banner},</if>
+            <if test="poster != null">poster = #{poster},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="living != null">living = #{living},</if>
+            <if test="userId != null and userId != 0">user_id = #{userId},</if>
+            <if test="liveTime != null">live_time = #{liveTime},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getLiveRoomList" resultType="LiveRoom">
+        SELECT
+        l.id,
+        title,
+        poster,
+        banner,
+        status,
+        living,
+        user_id,
+        live_time,
+        l.create_time,
+        l.update_time,
+        u.username AS author
+        FROM live_room AS l
+        INNER JOIN user AS u on l.user_id = u.id
+        WHERE 1 = 1
+        <if test="id != null and id != 0">
+            AND l.id = #{id}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <if test="living != null and living != ''">
+            AND living = #{living}
+        </if>
+        ORDER BY l.id DESC
+    </select>
+</mapper>

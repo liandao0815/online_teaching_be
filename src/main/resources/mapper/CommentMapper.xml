@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.CommentMapper">
+    <insert id="create" parameterType="Comment">
+        INSERT INTO comment (content, user_id, note_id)
+        VALUES (#{content}, #{userId}, #{noteId})
+    </insert>
+
+    <select id="getCommentList" resultType="Comment">
+        SELECT
+            c.content,
+            c.create_time,
+            u.username as author
+        FROM comment as c INNER JOIN user as u ON c.user_id = u.id
+        WHERE c.note_id = #{noteId}
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>

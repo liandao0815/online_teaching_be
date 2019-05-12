@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.ProblemMapper">
+    <insert id="create" parameterType="Problem">
+        INSERT INTO problem (title, content, user_id, category_id)
+        VALUES (#{title}, #{content}, #{userId}, #{categoryId})
+    </insert>
+
+    <select id="getProblemList" resultType="Problem">
+        SELECT
+            p.id,
+            p.title,
+            p.create_time,
+            p.status,
+            u.username AS author,
+            c.name     AS categoryName
+        FROM problem AS p
+            INNER JOIN user AS u on p.user_id = u.id
+            INNER JOIN category AS c on p.category_id = c.id
+        ORDER BY p.create_time DESC
+    </select>
+
+    <select id="getProblem" resultType="Problem">
+        SELECT
+            p.id,
+            p.title,
+            p.content,
+            p.status,
+            p.user_id,
+            p.create_time,
+            u.username AS author,
+            c.name     AS categoryName
+        FROM problem AS p
+            INNER JOIN user AS u on p.user_id = u.id
+            INNER JOIN category AS c on p.category_id = c.id
+        WHERE p.id = #{id}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE problem
+        SET status = '1'
+        WHERE id = #{id}
+    </update>
+
+    <select id="getProblemListByUser" resultType="Problem">
+        SELECT
+            p.id,
+            p.title,
+            p.content,
+            p.status,
+            p.user_id,
+            p.create_time,
+            u.username AS author,
+            c.name     AS categoryName
+        FROM problem AS p
+            INNER JOIN user AS u on p.user_id = u.id
+            INNER JOIN category AS c on p.category_id = c.id
+        WHERE p.user_id = #{userId}
+        ORDER BY p.id DESC
+    </select>
+</mapper>

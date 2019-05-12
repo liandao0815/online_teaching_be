@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+server:
+  servlet:
+    context-path: /api/v1
+
+mybatis:
+  type-aliases-package: com.liandao.onlineteaching.entity
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    use-column-label: true
+    use-generated-keys: true
+
+jwt:
+  header: Authorization
+  tokenPrefix: "Bearer "
+  secret: o2BDINWGFy#wCP8@nm#1t6sqjasqjunSqM30Nckj*@P2tBdJu1wUa_iWGfiNQRZa
+  expiration: 604800000
+
+qiniu:
+  accessKey: a0YPlrRePoL0_yLMen2MfeJUpQYQptKxWEeIB6nY
+  secretKey: w-ETyiiduxI1MGRsRBTDKU3rtT_tQ7SeS2qJOGm6
+  bucket: online-teaching
+  path: http://cdn.liandao.site/

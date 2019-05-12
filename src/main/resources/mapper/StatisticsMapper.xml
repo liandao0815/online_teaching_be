@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.StatisticsMapper">
+    <select id="getTodayData" resultType="java.lang.Integer">
+        SELECT count(*) as count
+        FROM
+            user
+        WHERE
+            TO_DAYS(login_time) = TO_DAYS(NOW())
+        UNION ALL
+        SELECT count(*)
+        FROM
+            live_room
+        WHERE
+            TO_DAYS(live_time) = TO_DAYS(NOW())
+        UNION ALL
+        SELECT COUNT(*)
+        FROM
+            course
+        WHERE
+            TO_DAYS(create_time) = TO_DAYS(NOW())
+        UNION ALL
+        SELECT count(*)
+        FROM
+            note
+        WHERE
+            TO_DAYS(create_time) = TO_DAYS(NOW())
+    </select>
+
+    <select id="getTotalData" resultType="java.lang.Integer">
+        SELECT count(*) as count
+        FROM
+            user
+        UNION ALL
+        SELECT count(*)
+        FROM
+            live_room
+        UNION ALL
+        SELECT COUNT(*)
+        FROM
+            course
+        UNION ALL
+        SELECT count(*)
+        FROM
+            note
+    </select>
+
+    <insert id="createActivity" parameterType="Activity">
+        INSERT INTO activity (year, month, count) VALUES (#{year}, #{month}, #{count})
+    </insert>
+
+    <select id="getActivityByPrevMonth" resultType="java.lang.Integer">
+        SELECT count(*) as count
+        FROM user
+        WHERE PERIOD_DIFF(DATE_FORMAT(NOW(), '%Y%m'), DATE_FORMAT(login_time, '%Y%m')) = 1
+    </select>
+
+    <select id="getActivityData" resultType="Activity">
+        SELECT
+            id,
+            year,
+            month,
+            count
+        FROM activity
+    </select>
+</mapper>

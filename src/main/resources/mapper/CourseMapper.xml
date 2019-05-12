@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liandao.onlineteaching.dao.CourseMapper">
+    <insert id="create" parameterType="Course">
+        INSERT INTO course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="poster != null">poster,</if>
+            <if test="link != null">link,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="categoryId != null">category_id,</if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="poster != null">#{poster},</if>
+            <if test="link != null">#{link},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+        </trim>
+    </insert>
+
+    <select id="getCourseList" resultType="Course">
+        SELECT
+        c.id,
+        c.name,
+        c.introduction,
+        c.poster,
+        c.priority,
+        c.link,
+        c.create_time,
+        c.update_time,
+        u.username AS author,
+        c2.name AS categoryName
+        FROM course AS c
+        INNER JOIN user AS u on c.user_id = u.id
+        INNER JOIN category c2 on c.category_id = c2.id
+        WHERE 1 = 1
+        <if test="id != null and id != ''">
+            AND c.id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            AND c.name LIKE '%${name}%'
+        </if>
+        <if test="priority != null and priority != ''">
+            AND c.priority = #{priority}
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            AND c.category_id = #{categoryId}
+        </if>
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="findById" resultType="Course">
+        SELECT
+            c.id,
+            c.name,
+            c.introduction,
+            c.poster,
+            c.priority,
+            c.link,
+            c.create_time,
+            c.update_time,
+            u.username AS author,
+            u.id AS userId,
+            c2.name    AS categoryName
+        FROM course AS c
+            INNER JOIN user AS u on c.user_id = u.id
+            INNER JOIN category c2 on c.category_id = c2.id
+        WHERE c.id = #{id}
+    </select>
+
+    <select id="getCourseListByUser" resultType="Course">
+        SELECT
+            c.id,
+            c.name,
+            c.introduction,
+            c.poster,
+            c.priority,
+            c.link,
+            c.create_time,
+            c.update_time,
+            u.username AS author,
+            c2.name    AS categoryName
+        FROM course AS c
+            INNER JOIN user AS u on c.user_id = u.id
+            INNER JOIN category c2 on c.category_id = c2.id
+        WHERE c.user_id = #{userId}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM course WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="Course">
+        UPDATE course SET priority = #{priority} WHERE id = #{id}
+    </update>
+</mapper>
