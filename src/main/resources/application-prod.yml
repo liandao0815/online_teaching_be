@@ -1,6 +1,6 @@
 spring:
   datasource:
     username: root
-    password: lad950815
+    password: xxxxxx
     url: jdbc:mysql://localhost:3306/online_teaching?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
