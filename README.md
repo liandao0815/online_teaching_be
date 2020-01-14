@@ -1,7 +1,7 @@
 # online_teaching_be
 校园网上教学系统后端项目（SpringBoot实现）
 
-[前端项目地址](https://github.com/liandao0815/online_teaching_be)
+[前端项目地址](https://github.com/liandao0815/online_teaching_fe)
 
 ## 技术支持
 - 主要开发框架：SpringBoot
